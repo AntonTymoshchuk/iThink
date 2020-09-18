@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %} iThink | Registration {% endblock %}
+
+{% block header %}
+    <a href="{{ url_for('authentication.login') }}">Log in</a>
+    <a href="{{ url_for('blog.index') }}">Blog</a>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <p>Username :</p>
+        <input name="username" type="text" required>
+        <p>Email :</p>
+        <input name="email" type="email" required>
+        <p>Password :</p>
+        <input name="password" type="password" required>
+        <br>
+        <input type="submit" value="Register">
+    </form>
+    {% for error_message in get_flashed_messages() %}
+        <p>{{ error_message }}</p>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} iThink | Blog {% endblock %}
+
+{% block header %}
+    {% if 'username' in g %}
+        <span>{{ g.username }} |</span>
+        <a href="{{ url_for('authentication.logout') }}">Log out</a>
+        <a href="{{ url_for('authentication.delete') }}">Delete</a>
+    {% else %}
+        <a href="{{ url_for('authentication.login') }}">Log in</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if 'username' in g %}
+        {% for post in g.posts %}
+            <p>{{ post['Theme'] }}</p>
+            <p>{{ post['Created'] }}</p>
+            <p>{{ post['Content'] }}</p>
+            <p>{{ str(post['Likes']) + ' likes' }}</p>
+        {% endfor %}
+    {% else %}
+        {% for post in g.posts %}
+            ...
+        {% endfor %}
+    {% endif %}
+{% endblock %}

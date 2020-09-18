@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %} iThink | Delete account {% endblock %}
+
+{% block header %}
+    <a href="{{ url_for('blog.index') }}">Blog</a>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <p>Password :</p>
+        <input name="password" type="password">
+        <br>
+        <input type="submit" value="Delete">
+    </form>
+    {% for error_message in get_flashed_messages() %}
+        <p>{{ error_message }}</p>
+    {% endfor %}
+{% endblock %}

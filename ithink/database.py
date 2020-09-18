@@ -11,7 +11,7 @@ def initialize_database():
     database = get_database()
     with current_app.open_resource('schema.sql') as resource:
         database.executescript(resource.read().decode('UTF-8'))
-    click.echo('Database created')
+    click.echo('Database initialized')
 
 
 def get_database():

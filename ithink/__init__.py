@@ -2,7 +2,7 @@ import os
 
 from flask import Flask
 
-from ithink import authentication, database
+from ithink import authentication, database, blog
 
 
 def create_app(config_file=None):
@@ -19,6 +19,7 @@ def create_app(config_file=None):
             SECRET_KEY=b'PGN@m\x90\xb3\xf3\x0f\x90\xb5S\x80)\xdaw',
             DATABASE=os.path.join(app.instance_path, 'ithink.sqlite'))
 
+    app.register_blueprint(blog.blog)
     app.register_blueprint(authentication.authentication)
 
     app.teardown_appcontext(database.close_database)
