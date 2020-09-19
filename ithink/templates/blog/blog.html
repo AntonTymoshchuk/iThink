@@ -6,23 +6,51 @@
     {% if 'username' in g %}
         <span>{{ g.username }} |</span>
         <a href="{{ url_for('authentication.logout') }}">Log out</a>
+        <span>|</span>
+        <a href="{{ url_for('authentication.edit') }}">Edit</a>
+        <span>|</span>
         <a href="{{ url_for('authentication.delete') }}">Delete</a>
+        <span>|</span>
+        <a href="{{ url_for('blog.create') }}">New post</a>
     {% else %}
         <a href="{{ url_for('authentication.login') }}">Log in</a>
     {% endif %}
 {% endblock %}
 
 {% block content %}
+    <br><br>
     {% if 'username' in g %}
         {% for post in g.posts %}
-            <p>{{ post['Theme'] }}</p>
-            <p>{{ post['Created'] }}</p>
-            <p>{{ post['Content'] }}</p>
-            <p>{{ str(post['Likes']) + ' likes' }}</p>
+            <span>{{ post['Theme'] }} |</span>
+            {% if g.username == post['Author'] %}
+                <span>My post |</span>
+                <span>(128 / 5) |</span>
+                <a href="{{ url_for('blog.edit', post_id=post['Id']) }}">Edit</a>
+                <span>|</span>
+                <a href="{{ url_for('blog.delete', post_id=post['Id']) }}">Delete</a>
+            {% else %}
+                <span>Author: {{ post['Author'] }} |</span>
+                <a href="">Like (12)</a>
+                <span>|</span>
+                <a href="">Dislike (2)</a>
+                <span>|</span>
+                <a href="">Comment</a>
+            {% endif %}
+            <br>
+            <span>{{ post['Content'] }}</span>
+            <br>
+            <span>{{ post['Created'] }}</span>
+            <br><br>
         {% endfor %}
     {% else %}
         {% for post in g.posts %}
-            ...
+            <span>{{ post['Theme'] }} |</span>
+            <span>{{ post['Author'] }}</span>
+            <br>
+            <span>{{ post['Content'] }}</span>
+            <br>
+            <span>{{ post['Created'] }}</span>
+            <br><br>
         {% endfor %}
     {% endif %}
 {% endblock %}

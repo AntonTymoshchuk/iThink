@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %} iThink | Edit post {% endblock %}
+
+{% block header %}
+    <a href="{{ url_for('blog.index') }}">Blog</a>
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% if 'post' in g %}
+            <p>Theme :</p>
+            <input name="theme" type="text" value="{{ g.post['Theme'] }}" required>
+            <p>Text : </p>
+            <textarea name="content" required>{{ g.post['Content'] }}</textarea>
+            <br>
+            <input type="submit" value="Save">
+        {% else %}
+            <p>Theme :</p>
+            <input name="theme" type="text" required>
+            <p>Text : </p>
+            <textarea name="content" required></textarea>
+            <br>
+            <input type="submit" value="Save">
+        {% endif %}
+    </form>
+    {% for error_message in get_flashed_messages() %}
+        <p>{{ error_message }}</p>
+    {% endfor %}
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} iThink | Delete account {% endblock %}
+{% block title %} iThink | New post {% endblock %}
 
 {% block header %}
     <a href="{{ url_for('blog.index') }}">Blog</a>
@@ -8,10 +8,12 @@
 
 {% block content %}
     <form method="post">
-        <p>Password :</p>
-        <input name="password" type="password" required>
+        <p>Theme :</p>
+        <input name="theme" type="text" required>
+        <p>Text : </p>
+        <textarea name="content" required></textarea>
         <br>
-        <input type="submit" value="Delete">
+        <input type="submit" value="Save">
     </form>
     {% for error_message in get_flashed_messages() %}
         <p>{{ error_message }}</p>
