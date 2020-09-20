@@ -11,32 +11,15 @@ authentication = Blueprint('authentication', __name__,
                            url_prefix='/authentication')
 
 
-@authentication.route('/')
-def index():
-    user_id = session.get('user_id')
-    g.user = None
-    if user_id is not None:
-        database = get_database()
-        user = database.execute('SELECT * FROM Users '
-                                'WHERE Id=?', (user_id,)).fetchone()
-        if user is not None:
-            g.user = user
-            return redirect(url_for('blog'))
-        else:
-            return redirect(url_for('authentication.registration'))
-    else:
-        return redirect(url_for('authentication.login'))
-
-
 @authentication.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         return render_template('authentication/login.html')
     elif request.method == 'POST':
         error = None
-        if request.form['email'] is None:
+        if request.form['email'] == '':
             error = 'You must enter your email!'
-        elif request.form['password'] is None:
+        elif request.form['password'] == '':
             error = 'You must enter your password!'
         if error is None:
             email = ascii_encrypt(request.form['email'])
@@ -62,12 +45,11 @@ def registration():
     elif request.method == 'POST':
         error = None
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-
-        if request.form['username'] is None:
+        if request.form['username'] == '':
             error = 'You must enter your username!'
-        elif request.form['email'] is None:
+        elif request.form['email'] == '':
             error = 'You must enter your email!'
-        elif request.form['password'] is None:
+        elif request.form['password'] == '':
             error = 'You must enter your password!'
         elif len(request.form['username']) < 2:
             error = 'Your username is too short, it must be at least 2 ' \
@@ -127,12 +109,11 @@ def edit():
     elif request.method == 'POST':
         error = None
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-
-        if request.form['username'] is None:
+        if request.form['username'] == '':
             error = 'You must enter your username!'
-        elif request.form['email'] is None:
+        elif request.form['email'] == '':
             error = 'You must enter your email!'
-        elif request.form['password'] is None:
+        elif request.form['password'] == '':
             error = 'You must enter your password!'
         elif len(request.form['username']) < 2:
             error = 'Your username is too short, it must be at least 2 ' \
@@ -186,7 +167,13 @@ def delete():
                                  'WHERE Id=?', (user_id,))
                 database.execute('DELETE FROM Posts '
                                  'Where Author=?', (user_id,))
+                database.execute('DELETE FROM Comments '
+                                 'WHERE Post=(SELECT Id FROM Posts '
+                                 'WHERE Author=?)', (user_id,))
+                database.execute('DELETE FROM Comments '
+                                 'WHERE Author=?', (user_id,))
                 database.commit()
+                session.clear()
             else:
                 error = 'Could not find such user!'
         else:

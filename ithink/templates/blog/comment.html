@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %} iThink | Comment {% endblock %}
+
+{% block header %}
+    <a href="{{ url_for('blog.index') }}">Blog</a>
+{% endblock %}
+
+{% block content %}
+    {% if 'post_content' in g %}
+        <p>{{ g.post_content }}</p>
+    {% endif %}
+    <form method="post">
+        <p>Comment :</p>
+        <textarea name="comment" required></textarea>
+        <br>
+        <input type="submit" value="Leave comment">
+    </form>
+    {% for error_message in get_flashed_messages() %}
+        <p>{{ error_message }}</p>
+    {% endfor %}
+{% endblock %}
